@@ -6,47 +6,50 @@ import Header from './Components/Header';
 import Home from './Pages/Home';
 import LogIn from './Pages/Auth/LogIn';
 import Register from './Pages/Auth/Register';
-
-export const AuthContext = React.createContext();
+import { useDispatch, useSelector } from 'react-redux';
+import { user_status, getUserById } from './redux/slices/UserSlice';
 
 function App() {
-    const [isAuth, setIsAuth] = React.useState(false);
+    const dispatch = useDispatch();
+
+    const { status } = useSelector((state) => state.UserReducer);
 
     React.useEffect(() => {
-        const localAuth = localStorage.getItem('auth');
-        if (localAuth) setIsAuth(localAuth);
+        dispatch(getUserById('1'));
     }, []);
 
     return (
-        <AuthContext.Provider value={{ isAuth, setIsAuth }}>
-            <BrowserRouter>
-                <Routes>
+        <BrowserRouter>
+            <Routes>
+                <Route
+                    path="/"
+                    element={
+                        <>
+                            <Header />
+                            {status === user_status.loading && <h1>Loading...</h1>}
+                            {status === user_status.error && <h1>Error occured :(</h1>}
+                            {status === user_status.success && <Account />}
+                        </>
+                    }
+                />
+                {status === user_status.success && (
                     <Route
-                        path="/"
+                        path="/board/:id"
                         element={
                             <>
                                 <Header />
-                                {isAuth ? <Account /> : <Home />}
+                                <Board />
                             </>
                         }
                     />
-                    {isAuth && (
-                        <Route
-                            path="/board/:id"
-                            element={
-                                <>
-                                    <Header />
-                                    <Board />
-                                </>
-                            }
-                        />
-                    )}
-                    {!isAuth && <Route path="/register" element={<Register />} />}
-                    {!isAuth && <Route path="/login" element={<LogIn />} />}
-                    <Route path="*" element={<Navigate to="/" replace />} />
-                </Routes>
-            </BrowserRouter>
-        </AuthContext.Provider>
+                )}
+                {status === user_status.success && (
+                    <Route path="/register" element={<Register />} />
+                )}
+                {status === user_status.success && <Route path="/login" element={<LogIn />} />}
+                <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+        </BrowserRouter>
     );
 }
 

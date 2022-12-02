@@ -1,9 +1,8 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { AuthContext } from '../../App';
 
 const LogIn = () => {
-    const { setIsAuth } = React.useContext(AuthContext);
     const navigate = useNavigate();
 
     const [email, setEmail] = React.useState('');
@@ -13,8 +12,6 @@ const LogIn = () => {
         event.preventDefault();
 
         console.log('login', { email, password });
-        setIsAuth(true);
-        localStorage.setItem('auth', true);
         navigate('/');
     };
 
@@ -22,7 +19,7 @@ const LogIn = () => {
         <div className="max-w-[400px] mx-auto px-4 pt-[150px]">
             <div className="flex flex-col gap-6">
                 <Link to="/">
-                    <button className="text-sm text-gray-400 hover:underline">
+                    <button type="button" className="text-sm text-gray-400 hover:underline">
                         &lt; back to Home
                     </button>
                 </Link>
@@ -52,7 +49,9 @@ const LogIn = () => {
                 <div className="self-center">
                     <span className="text-gray-400">Don't have an account?</span>
                     <Link to="/register">
-                        <button className="hover:underline ml-2">Register</button>
+                        <button type="button" className="hover:underline ml-2">
+                            Register
+                        </button>
                     </Link>
                 </div>
             </div>

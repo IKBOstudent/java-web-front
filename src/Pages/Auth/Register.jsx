@@ -1,10 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { AuthContext } from '../../App';
-
 const Register = () => {
-    const { setIsAuth } = React.useContext(AuthContext);
     const navigate = useNavigate();
 
     const [email, setEmail] = React.useState('');
@@ -14,8 +11,7 @@ const Register = () => {
         event.preventDefault();
 
         console.log('register', { email, password });
-        setIsAuth(true);
-        localStorage.setItem('auth', true);
+
         navigate('/');
     };
 
@@ -23,7 +19,7 @@ const Register = () => {
         <div className="max-w-[400px] mx-auto px-4 pt-[150px]">
             <div className="flex flex-col gap-6">
                 <Link to="/">
-                    <button className="text-sm text-gray-400 hover:underline">
+                    <button type="button" className="text-sm text-gray-400 hover:underline">
                         &lt; back to Home
                     </button>
                 </Link>
@@ -55,7 +51,9 @@ const Register = () => {
                 <div className="self-center">
                     <span className="text-gray-400">Already have an account?</span>
                     <Link to="/login">
-                        <button className="hover:underline ml-2">Log In</button>
+                        <button type="button" className="hover:underline ml-2">
+                            Log In
+                        </button>
                     </Link>
                 </div>
             </div>

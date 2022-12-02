@@ -1,14 +1,17 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { AuthContext } from '../App';
 
 const Header = () => {
-    const { isAuth } = React.useContext(AuthContext);
+    const isAuth = useSelector((state) => state.UserReducer.status) === 1;
+
     return (
         <header className="mx-auto px-4 bg-gray-200">
             <div className="flex justify-between items-center">
                 <div className="flex gap-4 items-center">
-                    <button className="p-4">MMManager</button>
+                    <Link to="/">
+                        <button className="p-4">MMManager</button>
+                    </Link>
                     {isAuth && <button className="p-4">Recent</button>}
                 </div>
                 <div className="flex gap-0">
