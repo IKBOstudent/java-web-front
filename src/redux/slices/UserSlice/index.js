@@ -1,6 +1,6 @@
-import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 
-import axios from 'axiosConfig';
+import axios from "axiosConfig";
 
 export const user_status = {
     loading: 0,
@@ -10,48 +10,48 @@ export const user_status = {
 
 // async actions
 export const getUserById = createAsyncThunk(
-    'user/getUserById',
+    "user/getUserById",
     async (userId, { rejectWithValue, getState, dispatch }) => {
         try {
-            const response = await axios.get('/users', { userId });
+            const response = await axios.get("/users", { userId });
             dispatch(setUser(response.data));
         } catch (error) {
-            rejectWithValue(error);
+            return rejectWithValue(error);
         }
-    },
+    }
 );
 
 export const postBoard = createAsyncThunk(
-    'user/postBoard',
+    "user/postBoard",
     async ({ userId, boardName }, { rejectWithValue, getState, dispatch }) => {
         try {
-            const response = await axios.post('/boards', { userId, boardName });
+            const response = await axios.post("/boards", { userId, boardName });
             dispatch(addBoard(response.data));
         } catch (error) {
             rejectWithValue(error);
         }
-    },
+    }
 );
 
 export const deleteBoardById = createAsyncThunk(
-    'user/deleteBoardById',
+    "user/deleteBoardById",
     async ({ userId, boardId }, { rejectWithValue, getState, dispatch }) => {
         try {
             console.log(userId, boardId);
-            const response = await axios.delete('/boards', { userId, boardId });
+            const response = await axios.delete("/boards", { userId, boardId });
             dispatch(deleteBoard(response.data));
         } catch (error) {
             rejectWithValue(error);
         }
-    },
+    }
 );
 
 // common reducers
-const pendingReducerUser = (state) => {
+const pendingReducerUser = state => {
     state.status = user_status.loading;
 };
 const rejectedReducerUser = (state, action) => {
-    console.warn(action.payload);
+    console.log(action.payload);
     state.status = user_status.error;
 };
 
@@ -62,7 +62,7 @@ const initialState = {
 };
 
 const UserSlice = createSlice({
-    name: 'user',
+    name: "user",
     initialState,
     reducers: {
         setUser: (state, action) => {
@@ -77,7 +77,7 @@ const UserSlice = createSlice({
         },
         deleteBoard: (state, action) => {
             const { boardId } = action.payload;
-            state.data.boards = state.data.boards.filter((item) => item.boardId !== boardId);
+            state.data.boards = state.data.boards.filter(item => item.boardId !== boardId);
             state.status = user_status.success;
             console.log(current(state));
         },

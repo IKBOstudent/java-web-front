@@ -1,31 +1,31 @@
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { postBoard } from '../../redux/slices/UserSlice';
-import BoardCard from './BoardCard';
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { postBoard } from "../../redux/slices/UserSlice";
+import BoardCard from "./BoardCard";
 
 const Account = () => {
     const dispatch = useDispatch();
-    const { data: userData } = useSelector((state) => state.UserReducer);
+    const { data: userData } = useSelector(state => state.UserReducer);
 
     const [createBoardShow, setCreateBoardShow] = React.useState(false);
-    const [newName, setNewName] = React.useState('');
+    const [newName, setNewName] = React.useState("");
 
-    const handleSubmitCreateBoard = (event) => {
+    const handleSubmitCreateBoard = event => {
         event.preventDefault();
 
         if (newName.length > 0) {
             dispatch(postBoard({ userId: userData.id, boardName: newName }));
             setCreateBoardShow(false);
         } else {
-            console.log('invalid');
+            console.log("invalid");
         }
-        setNewName('');
+        setNewName("");
     };
 
     return (
-        <div className="container mx-auto pt-10">
+        <div className="container mx-auto pt-10 px-4">
             <h1 className="text-3xl font-bold px-6">Your workspaces</h1>
-            <div className="flex gap-4 w-full mt-4">
+            <div className="flex gap-4 w-full mt-4 flex-wrap px-6">
                 {userData?.boards?.map((item, id) => (
                     <BoardCard key={item.boardId} item={item} userId={userData.id} />
                 ))}
@@ -38,7 +38,7 @@ const Account = () => {
                                 type="text"
                                 placeholder="Enter new board name"
                                 className="input-default"
-                                onChange={(event) => setNewName(event.target.value)}
+                                onChange={event => setNewName(event.target.value)}
                                 value={newName}
                             />
                             <div>
@@ -50,8 +50,9 @@ const Account = () => {
                                     className="w-1/3 text-center self-start btn-underline"
                                     onClick={() => {
                                         setCreateBoardShow(false);
-                                        setNewName('');
-                                    }}>
+                                        setNewName("");
+                                    }}
+                                >
                                     Cancel
                                 </button>
                             </div>
@@ -61,7 +62,8 @@ const Account = () => {
                     <button
                         type="button"
                         className="bg-slate-100 p-4 w-[12rem] flex items-center text-center"
-                        onClick={() => setCreateBoardShow(true)}>
+                        onClick={() => setCreateBoardShow(true)}
+                    >
                         <span>+ Create a board</span>
                     </button>
                 )}
