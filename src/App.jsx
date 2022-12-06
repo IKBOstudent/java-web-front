@@ -15,7 +15,7 @@ function App() {
     const { status } = useSelector(state => state.UserReducer);
 
     React.useEffect(() => {
-        dispatch(getUserById(".aNIxnO_XyYN175dvNo38S"));
+        dispatch(getUserById("1"));
     }, []);
 
     return (

@@ -27,7 +27,7 @@ const Account = () => {
             <h1 className="text-3xl font-bold px-6">Your workspaces</h1>
             <div className="flex gap-4 w-full mt-4 flex-wrap px-6">
                 {userData?.boards?.map((item, id) => (
-                    <BoardCard key={item.boardId} item={item} userId={userData.id} />
+                    <BoardCard key={item.id} item={item} userId={userData.id} />
                 ))}
 
                 {createBoardShow ? (

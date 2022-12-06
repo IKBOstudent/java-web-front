@@ -1,15 +1,15 @@
-import Header from 'Components/Header';
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router';
-import { postList, board_status, getBoardById } from 'redux/slices/BoardSlice';
+import Header from "Components/Header";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router";
+import { postList, board_status, getBoardById } from "redux/slices/BoardSlice";
 
-import List from './List';
+import List from "./List";
 
 const Board = () => {
     const dispatch = useDispatch();
-    const { data: userData } = useSelector((state) => state.UserReducer);
-    const { data, status } = useSelector((state) => state.BoardReducer);
+    const { data: userData } = useSelector(state => state.UserReducer);
+    const { data, status } = useSelector(state => state.BoardReducer);
 
     const params = useParams();
 
@@ -18,19 +18,19 @@ const Board = () => {
     }, [params]);
 
     const [createListShow, setCreateListShow] = React.useState(false);
-    const [newName, setNewName] = React.useState('');
+    const [newName, setNewName] = React.useState("");
 
-    const handleSubmitCreateList = (event) => {
+    const handleSubmitCreateList = event => {
         event.preventDefault();
 
         if (newName.length > 0) {
             dispatch(postList({ boardId: params.id, listName: newName }));
             setCreateListShow(false);
         } else {
-            console.log('invalid');
+            console.log("invalid");
         }
 
-        setNewName('');
+        setNewName("");
     };
 
     return (
@@ -55,21 +55,19 @@ const Board = () => {
 
                         <div className="grow px-4 w-full flex gap-6 items-start overflow-x-auto select-none ">
                             {data?.lists.map((item, id) => (
-                                <List key={item.listId} list={item} />
+                                <List key={item.id} list={item} />
                             ))}
 
                             <div className="bg-slate-300 min-w-[15rem]">
                                 {createListShow ? (
                                     <div className="flex flex-col gap-4 p-4 ">
-                                        <form
-                                            className="flex flex-col gap-2"
-                                            onSubmit={handleSubmitCreateList}>
+                                        <form className="flex flex-col gap-2" onSubmit={handleSubmitCreateList}>
                                             <input
                                                 autoFocus
                                                 type="text"
                                                 placeholder="Enter new list name"
                                                 className="input-default"
-                                                onChange={(event) => setNewName(event.target.value)}
+                                                onChange={event => setNewName(event.target.value)}
                                                 value={newName}
                                             />
                                             <div>
@@ -81,8 +79,9 @@ const Board = () => {
                                                     className="w-1/3 btn-underline"
                                                     onClick={() => {
                                                         setCreateListShow(false);
-                                                        setNewName('');
-                                                    }}>
+                                                        setNewName("");
+                                                    }}
+                                                >
                                                     Cancel
                                                 </button>
                                             </div>
@@ -92,7 +91,8 @@ const Board = () => {
                                     <button
                                         type="button"
                                         className="btn-no-fill w-full p-3"
-                                        onClick={() => setCreateListShow(true)}>
+                                        onClick={() => setCreateListShow(true)}
+                                    >
                                         + Add a list
                                     </button>
                                 )}
