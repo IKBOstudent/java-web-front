@@ -28,21 +28,19 @@ const LogIn = () => {
                 <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
                     <input
                         type="email"
-                        className="appearance-none border border-slate-400 p-2 focus:outline-none focus:border-slate-600"
+                        className="input-default"
                         placeholder="you@example.com"
                         onChange={(event) => setEmail(event.target.value)}
                         value={email}
                     />
                     <input
                         type="password"
-                        className="appearance-none border border-slate-400 p-2 focus:outline-none focus:border-slate-600"
+                        className="input-default"
                         placeholder="Enter password"
                         onChange={(event) => setPassword(event.target.value)}
                         value={password}
                     />
-                    <button
-                        type="submit"
-                        className="bg-slate-900 hover:bg-slate-900/90 text-white p-4">
+                    <button type="submit" className="btn-filled">
                         Log In
                     </button>
                 </form>

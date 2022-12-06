@@ -1,4 +1,5 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit';
+
 import axios from 'axiosConfig';
 
 export const user_status = {
@@ -8,24 +9,55 @@ export const user_status = {
 };
 
 // async actions
-export const getUserById = createAsyncThunk('user/getUserById', async (userId) => {
-    const response = await axios.get('/users/' + userId);
-    return response.data;
-});
+export const getUserById = createAsyncThunk(
+    'user/getUserById',
+    async (userId, { rejectWithValue, getState, dispatch }) => {
+        try {
+            const response = await axios.get('/users', { userId });
+            dispatch(setUser(response.data));
+        } catch (error) {
+            rejectWithValue(error);
+        }
+    },
+);
+
+export const postBoard = createAsyncThunk(
+    'user/postBoard',
+    async ({ userId, boardName }, { rejectWithValue, getState, dispatch }) => {
+        try {
+            const response = await axios.post('/boards', { userId, boardName });
+            dispatch(addBoard(response.data));
+        } catch (error) {
+            rejectWithValue(error);
+        }
+    },
+);
+
+export const deleteBoardById = createAsyncThunk(
+    'user/deleteBoardById',
+    async ({ userId, boardId }, { rejectWithValue, getState, dispatch }) => {
+        try {
+            console.log(userId, boardId);
+            const response = await axios.delete('/boards', { userId, boardId });
+            dispatch(deleteBoard(response.data));
+        } catch (error) {
+            rejectWithValue(error);
+        }
+    },
+);
 
 // common reducers
-const pendingReducer = (state) => {
-    state.data = null;
+const pendingReducerUser = (state) => {
     state.status = user_status.loading;
 };
-const rejectedReducer = (state) => {
-    state.data = null;
+const rejectedReducerUser = (state, action) => {
+    console.warn(action.payload);
     state.status = user_status.error;
 };
 
 // data format: {id, username, boards: [{ boardId, boardName ]}
 const initialState = {
-    data: null,
+    data: {},
     status: user_status.loading,
 };
 
@@ -33,21 +65,35 @@ const UserSlice = createSlice({
     name: 'user',
     initialState,
     reducers: {
+        setUser: (state, action) => {
+            state.data = action.payload;
+            state.status = user_status.success;
+            console.log(current(state));
+        },
         addBoard: (state, action) => {
-            const prev = state.data.boards;
-            state.data.boards = [...prev, { boardId: prev.length + 1, boardName: action.payload }];
+            state.data.boards.push(action.payload);
+            state.status = user_status.success;
+            console.log(current(state));
+        },
+        deleteBoard: (state, action) => {
+            const { boardId } = action.payload;
+            state.data.boards = state.data.boards.filter((item) => item.boardId !== boardId);
+            state.status = user_status.success;
+            console.log(current(state));
         },
     },
     extraReducers: {
-        [getUserById.pending]: pendingReducer,
-        [getUserById.fulfilled]: (state, action) => {
-            state.data = action.payload;
-            state.status = user_status.success;
-        },
-        [getUserById.rejected]: rejectedReducer,
+        [getUserById.pending]: pendingReducerUser,
+        [getUserById.rejected]: rejectedReducerUser,
+
+        [postBoard.pending]: pendingReducerUser,
+        [postBoard.rejected]: rejectedReducerUser,
+
+        [deleteBoardById.pending]: pendingReducerUser,
+        [deleteBoardById.rejected]: rejectedReducerUser,
     },
 });
 
-export const { addBoard } = UserSlice.actions;
+export const { setUser, addBoard, deleteBoard } = UserSlice.actions;
 
 export const UserReducer = UserSlice.reducer;

@@ -1,12 +1,13 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { user_status } from 'redux/slices/UserSlice';
 
 const Header = () => {
-    const isAuth = useSelector((state) => state.UserReducer.status) === 1;
+    const isAuth = useSelector((state) => state.UserReducer.status) === user_status.success;
 
     return (
-        <header className="mx-auto px-4 bg-gray-200">
+        <header className="px-4 bg-gray-200">
             <div className="flex justify-between items-center">
                 <div className="flex gap-4 items-center">
                     <Link to="/">
@@ -22,14 +23,10 @@ const Header = () => {
                     ) : (
                         <>
                             <Link to="/login">
-                                <button className="p-4 w-24 hover:bg-slate-300 ease-in-out duration-300">
-                                    Log In
-                                </button>
+                                <button className="btn-no-fill">Log In</button>
                             </Link>
                             <Link to="/register">
-                                <button className="p-4 w-24 bg-slate-900 hover:bg-slate-900/90 text-white ease-in-out duration-300">
-                                    Sign Up
-                                </button>
+                                <button className="btn-filled">Sign Up</button>
                             </Link>
                         </>
                     )}
